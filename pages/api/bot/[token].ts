@@ -7,14 +7,16 @@ import { Update } from "../../../telegram-bot/types/Update";
 
 let firebaseApp: App | null = null;
 
+const firebaseProjectId = process.env.FIREBASE_PROJECT_ID as string;
+
 function getFirebaseApp() {
   if (firebaseApp === null) {
     firebaseApp = initializeApp({
-      projectId: "codelabs-36517",
+      projectId: firebaseProjectId,
       credential: cert(
         JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT as string)
       ),
-      databaseURL: "https://codelabs-36517.firebaseio.com",
+      databaseURL: `https://${firebaseProjectId}.firebaseio.com`,
     });
   }
   return firebaseApp;
