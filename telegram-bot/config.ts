@@ -3,5 +3,5 @@ export function getBotToken(): string {
 }
 
 export function getBotWebhookURL(): string {
-  return `https://inspiring-jepsen-4b9b8f.netlify.app/bot/${getBotToken()}`;
+  return `https://inspiring-jepsen-4b9b8f.netlify.app/api/bot/${getBotToken()}`;
 }
