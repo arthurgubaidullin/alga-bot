@@ -6,14 +6,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const resp = await axios.post<{ url?: string }>(
+  const resp = await axios.post<{ ok: boolean; result?: { url?: string } }>(
     `https://api.telegram.org/bot${getBotToken()}/getWebhookInfo`,
     {}
   );
 
-  console.log(resp.data);
-
-  if (resp.data.url && resp.data.url === getBotWebhookURL()) {
+  if (resp.data.result?.url && resp.data.result.url === getBotWebhookURL()) {
     res.status(400).end();
     return;
   }
