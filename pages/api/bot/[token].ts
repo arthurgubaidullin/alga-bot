@@ -2,6 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getBotToken } from "../../../telegram-bot/config";
 import { sendMessage } from "../../../telegram-bot/methods";
 import { Update } from "../../../telegram-bot/types/Update";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
+
+const firebaseApp = (async () => initializeApp())();
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,6 +25,14 @@ export default async function handler(
   }
 
   console.log(update);
+
+  {
+    const app = await firebaseApp;
+    const db = getFirestore(app);
+    if (update) {
+      await db.collection("telegram_updates").add(update);
+    }
+  }
 
   if (
     update &&
