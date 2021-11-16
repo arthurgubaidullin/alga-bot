@@ -1,27 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getBotToken } from "../../../telegram-bot/config";
 import { sendMessage } from "../../../telegram-bot/methods";
-
-type User = {
-  id: number;
-  is_bot: boolean;
-};
-
-type Chat = {
-  id: number;
-  type: "private" | "group" | "supergroup" | "channel";
-};
-
-type Message = {
-  message_id: number;
-  from?: User;
-  text?: string;
-  chat?: Chat;
-};
-
-type Update = {
-  message?: Message;
-};
+import { Update } from "../../../telegram-bot/types/Update";
 
 export default async function handler(
   req: NextApiRequest,

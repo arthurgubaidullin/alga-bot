@@ -1,23 +1,19 @@
-import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getBotToken, getBotWebhookURL } from "../../../telegram-bot/config";
+import { getBotWebhookURL } from "../../../telegram-bot/config";
+import { getWebhookInfo, setWebhook } from "../../../telegram-bot/methods";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const resp = await axios.post<{ ok: boolean; result?: { url?: string } }>(
-    `https://api.telegram.org/bot${getBotToken()}/getWebhookInfo`,
-    {}
-  );
+  const url = await getWebhookInfo();
 
-  if (resp.data.result?.url && resp.data.result.url === getBotWebhookURL()) {
+  if (url === getBotWebhookURL()) {
     res.status(400).end();
     return;
   }
 
-  await axios.post(`https://api.telegram.org/bot${getBotToken()}/setWebhook`, {
-    url: getBotWebhookURL(),
-  });
+  await setWebhook();
+
   res.status(200).end();
 }
