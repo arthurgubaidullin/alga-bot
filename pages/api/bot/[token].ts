@@ -12,7 +12,9 @@ export default async function handler(
   const firebaseApp = (async () =>
     initializeApp({
       projectId: "codelabs-36517",
-      credential: cert(process.env.FIREBASE_SERVICE_ACCOUNT as string),
+      credential: cert(
+        JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT as string)
+      ),
       databaseURL: "https://codelabs-36517.firebaseio.com",
     }))();
 
