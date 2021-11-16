@@ -5,17 +5,17 @@ import { Update } from "../../../telegram-bot/types/Update";
 import { applicationDefault, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
-const firebaseApp = (async () =>
-  initializeApp({
-    projectId: "codelabs-36517",
-    credential: applicationDefault(),
-    databaseURL: "https://codelabs-36517.firebaseio.com",
-  }))();
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const firebaseApp = (async () =>
+    initializeApp({
+      projectId: "codelabs-36517",
+      credential: applicationDefault(),
+      databaseURL: "https://codelabs-36517.firebaseio.com",
+    }))();
+
   if (req.query?.token && req.query.token !== getBotToken()) {
     res.status(403).end();
     return;
