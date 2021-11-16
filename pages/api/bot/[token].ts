@@ -9,6 +9,7 @@ type User = {
 
 type Chat = {
   id: number;
+  type: "private" | "group" | "supergroup" | "channel";
 };
 
 type Message = {
@@ -47,7 +48,8 @@ export default async function handler(
     update.message.chat &&
     update.message.from &&
     update.message.text &&
-    !update.message.from.is_bot
+    !update.message.from.is_bot &&
+    update.message.chat.type === "private"
   ) {
     // send echo
     console.log("echo");
