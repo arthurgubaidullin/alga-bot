@@ -1,23 +1,29 @@
-import { cert, initializeApp } from "firebase-admin/app";
+import { cert, initializeApp, getApp, getApps, App } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getBotToken } from "../../../telegram-bot/config";
 import { sendMessage } from "../../../telegram-bot/methods";
 import { Update } from "../../../telegram-bot/types/Update";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const firebaseApp = (async () =>
-    initializeApp({
+let firebaseApp: App | null = null;
+
+function getFirebaseApp() {
+  if (firebaseApp === null) {
+    firebaseApp = initializeApp({
       projectId: "codelabs-36517",
       credential: cert(
         JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT as string)
       ),
       databaseURL: "https://codelabs-36517.firebaseio.com",
-    }))();
+    });
+  }
+  return firebaseApp;
+}
 
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.query?.token && req.query.token !== getBotToken()) {
     res.status(403).end();
     return;
@@ -34,7 +40,7 @@ export default async function handler(
   console.log(update);
 
   {
-    const app = await firebaseApp;
+    const app = getFirebaseApp();
     const db = getFirestore(app);
     if (update) {
       await db.collection("telegram_updates").add(update);
