@@ -11,6 +11,8 @@ export default async function handler(
     {}
   );
 
+  console.log(resp.data);
+
   if (resp.data.url && resp.data.url === getBotWebhookURL()) {
     res.status(400).end();
     return;
