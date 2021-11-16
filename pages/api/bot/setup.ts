@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getBotToken, getBotWebhookURL } from "../../../telegram-bot/config";
 
 export default async function handler(
   req: NextApiRequest,
@@ -19,12 +20,4 @@ export default async function handler(
     url: getBotWebhookURL(),
   });
   res.status(200).end();
-}
-
-function getBotWebhookURL() {
-  return `https://inspiring-jepsen-4b9b8f.netlify.app/bot/${getBotToken()}`;
-}
-
-function getBotToken(): string {
-  return process.env.TELEGRAM_BOT_TOKEN as string;
 }

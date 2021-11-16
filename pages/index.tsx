@@ -5,12 +5,12 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title></title>
-        <meta name="description" content="" />
+        <title>test</title>
+        <meta name="description" content="test" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main></main>
+      <main>test</main>
     </div>
   );
 };

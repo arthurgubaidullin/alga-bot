@@ -1,5 +1,6 @@
-import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getBotToken } from "../../../telegram-bot/config";
+import { sendMessage } from "../../../telegram-bot/methods";
 
 type User = {
   id: number;
@@ -25,14 +26,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { token } = req.query;
-
-  if (token !== getBotToken()) {
+  if (req.query?.token && req.query.token !== getBotToken()) {
     res.status(403).end();
     return;
   }
 
-  const update = req.body as Update;
+  const update = req.body as Update | undefined;
 
   if (typeof update === "string") {
     console.log("oops!");
@@ -43,6 +42,7 @@ export default async function handler(
   console.log(update);
 
   if (
+    update &&
     update.message &&
     update.message.chat &&
     update.message.from &&
@@ -50,6 +50,7 @@ export default async function handler(
     !update.message.from.is_bot
   ) {
     // send echo
+    console.log("echo");
     await sendMessage({
       chatId: update.message.chat.id,
       text: update.message.text,
@@ -58,22 +59,4 @@ export default async function handler(
   }
 
   res.status(200).end();
-}
-
-async function sendMessage(params: {
-  chatId: number;
-  text: string;
-  replyToMessageId?: number;
-}): Promise<void> {
-  await axios.post(`https://api.telegram.org/bot${getBotToken()}/sendMessage`, {
-    chat_id: params.chatId,
-    text: params.text,
-    ...(params.replyToMessageId
-      ? { reply_to_message_id: params.replyToMessageId }
-      : {}),
-  });
-}
-
-function getBotToken(): string {
-  return process.env.TELEGRAM_BOT_TOKEN as string;
 }
