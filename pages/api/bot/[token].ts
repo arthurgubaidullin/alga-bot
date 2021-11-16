@@ -2,10 +2,15 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getBotToken } from "../../../telegram-bot/config";
 import { sendMessage } from "../../../telegram-bot/methods";
 import { Update } from "../../../telegram-bot/types/Update";
-import { initializeApp } from "firebase-admin/app";
+import { applicationDefault, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 
-const firebaseApp = (async () => initializeApp())();
+const firebaseApp = (async () =>
+  initializeApp({
+    projectId: "codelabs-36517",
+    credential: applicationDefault(),
+    databaseURL: "https://codelabs-36517.firebaseio.com",
+  }))();
 
 export default async function handler(
   req: NextApiRequest,
