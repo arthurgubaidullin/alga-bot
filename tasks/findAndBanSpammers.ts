@@ -32,7 +32,7 @@ export async function findAndBanSpammers(
       spammers.map(async (spammer) => {
         const uid = spammer.id;
         const ref = db
-          .collection(`telegram_${chat.type}s`)
+          .collection(`telegram_groups`)
           .doc(chat.id.toString())
           .collection("spammers")
           .doc(uid.toString());
