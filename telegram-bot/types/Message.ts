@@ -6,4 +6,5 @@ export type Message = {
   from?: User;
   text?: string;
   chat?: Chat;
+  new_chat_members?: User[];
 };
