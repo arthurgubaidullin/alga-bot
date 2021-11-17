@@ -43,14 +43,18 @@ export async function banChatMember(params: {
   chatId: number | string;
   userId: number;
   revokeMessages?: boolean;
-}): Promise<void> {
-  await axios.post<Response<any>>(method("banChatMember"), {
+}): Promise<boolean> {
+  const resp = await axios.post<Response<boolean>>(method("banChatMember"), {
     chat_id: params.chatId,
     user_id: params.userId,
     ...(params.revokeMessages
       ? { revoke_messages: params.revokeMessages }
       : {}),
   });
+  if (!resp.data.ok) {
+    throw new Error(resp.data.description);
+  }
+  return resp.data.result;
 }
 
 function method(
