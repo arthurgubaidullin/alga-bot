@@ -3,6 +3,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   orderBy,
   query,
 } from "firebase/firestore";
@@ -31,4 +32,13 @@ export const getUserData = async (uid: string) => {
     return null;
   }
   return s.data() as UserData;
+};
+
+export const watchUserData = (uid: string, cb: (ud: UserData) => void) => {
+  const db = getFirestore();
+  const ref = doc(db, "users", uid);
+  return onSnapshot(ref, (s) => {
+    const ud = s.data() as UserData;
+    cb(ud);
+  });
 };
