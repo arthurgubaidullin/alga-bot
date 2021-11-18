@@ -1,4 +1,4 @@
-import { User } from "firebase/auth";
+import { Unsubscribe, User } from "firebase/auth";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import {
   signInWithGithub,
   signOut,
 } from "../firebase/client/auth";
-import { getSpammers, getUserData } from "../services";
+import { getSpammers, watchUserData } from "../services";
 import { Spammer } from "../types/Spammer";
 import { UserData } from "../types/UserData";
 
@@ -23,11 +23,13 @@ const useUserData = () => {
     undefined
   );
   useEffect(() => {
+    let unsubscribe: Unsubscribe | undefined;
     if (user) {
-      getUserData(user.uid).then(setUserData);
+      unsubscribe = watchUserData(user.uid, setUserData);
     } else {
       setUserData(null);
     }
+    return () => unsubscribe?.();
   }, [user]);
   return userData;
 };
