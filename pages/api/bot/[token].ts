@@ -7,7 +7,7 @@ import { logError } from "../../../logError";
 import { echoInPrivateChat } from "../../../tasks/echoInPrivateChat";
 import { findAndBanSpammers } from "../../../tasks/findAndBanSpammers";
 import { logUpdateToFirestore } from "../../../tasks/logUpdateToFirestore";
-import { getFirebaseApp } from "../../../firebaseApp";
+import { getFirebaseApp } from "../../../firebase/server/app";
 
 export default async function handler(
   req: NextApiRequest,
