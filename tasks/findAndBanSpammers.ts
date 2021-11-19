@@ -41,7 +41,7 @@ export async function findAndBanSpammers(
           chatId: chat.id,
           userId: uid,
           revokeMessages: true,
-        });
+        }).then((a) => console.log("ban result", a));
 
         const createDocTask = ref.create({
           id: uid.toString(),
