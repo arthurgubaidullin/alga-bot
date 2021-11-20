@@ -1,6 +1,6 @@
 import { FieldValue, Firestore } from "firebase-admin/firestore";
 import { isSpam } from "../spam-detector";
-import { banChatMember } from "../telegram-bot/methods";
+import { banChatMember, deleteMessage } from "../telegram-bot/methods";
 import { Update } from "../telegram-bot/types/Update";
 
 export async function findAndBanSpammers(
@@ -28,6 +28,14 @@ export async function findAndBanSpammers(
       )
       .filter(<T>(spammer: T): spammer is NonNullable<T> => spammer !== null);
 
+    const maybeDeleteMessageTask: Promise<boolean> =
+      spammers.length > 0
+        ? deleteMessage({
+            chatId: chat.id,
+            messageId: message.message_id,
+          })
+        : Promise.resolve(true);
+
     await Promise.all(
       spammers.map(async (spammer) => {
         const uid = spammer.id;
@@ -53,5 +61,6 @@ export async function findAndBanSpammers(
         await Promise.all([createDocTask, banTask]);
       })
     );
+    await maybeDeleteMessageTask;
   }
 }
