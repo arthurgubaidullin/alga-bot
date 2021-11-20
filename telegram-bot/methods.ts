@@ -57,8 +57,27 @@ export async function banChatMember(params: {
   return resp.data.result;
 }
 
+export async function deleteMessage(params: {
+  chatId: number | string;
+  messageId: number;
+}): Promise<boolean> {
+  const resp = await axios.post<Response<boolean>>(method("deleteMessage"), {
+    chat_id: params.chatId,
+    message_id: params.messageId,
+  });
+  if (!resp.data.ok) {
+    throw new Error(resp.data.description);
+  }
+  return resp.data.result;
+}
+
 function method(
-  name: "banChatMember" | "getWebhookInfo" | "sendMessage" | "setWebhook"
+  name:
+    | "deleteMessage"
+    | "banChatMember"
+    | "getWebhookInfo"
+    | "sendMessage"
+    | "setWebhook"
 ) {
   return `https://api.telegram.org/bot${getBotToken()}/${name}` as const;
 }
