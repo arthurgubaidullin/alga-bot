@@ -19,3 +19,14 @@ export function getGroupId(): string {
   }
   return groupId;
 }
+
+const ownerUserName = process.env.TELEGRAM_GROUP_OWNER_USERNAME;
+
+export function getOwnerUserName(): string {
+  if (!ownerUserName) {
+    throw new Error(
+      "TELEGRAM_GROUP_OWNER_USERNAME enviroment variable not setted."
+    );
+  }
+  return ownerUserName;
+}
