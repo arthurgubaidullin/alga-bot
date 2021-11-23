@@ -1,5 +1,10 @@
+const botToken = process.env.TELEGRAM_BOT_TOKEN;
+
 export function getBotToken(): string {
-  return process.env.TELEGRAM_BOT_TOKEN as string;
+  if (!botToken) {
+    throw new Error("TELEGRAM_BOT_TOKEN enviroment variable not setted.");
+  }
+  return botToken;
 }
 
 const host = process.env.HOST;
