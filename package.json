@@ -2,6 +2,7 @@
   "name": "alga-bot",
   "private": true,
   "scripts": {
+    "check": "tsc --noEmit",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
