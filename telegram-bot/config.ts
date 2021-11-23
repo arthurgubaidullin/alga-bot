@@ -3,5 +3,9 @@ export function getBotToken(): string {
 }
 
 export function getBotWebhookURL(): string {
-  return `https://inspiring-jepsen-4b9b8f.netlify.app/api/bot/${getBotToken()}`;
+  const host = process.env.HOST;
+  if (!host) {
+    throw new Error("HOST enviroment variable not setted.");
+  }
+  return `https://${host}/api/bot/${getBotToken()}`;
 }
