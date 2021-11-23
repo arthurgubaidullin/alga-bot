@@ -1,5 +1,4 @@
-import { getFirestore } from "firebase-admin/firestore";
-import { getFirebaseApp } from "./firebase/server/app";
+import { getFirestore } from "./firebase/server/firestore";
 import { echoInPrivateChat } from "./tasks/echoInPrivateChat";
 import { findAndBanSpammers } from "./tasks/findAndBanSpammers";
 import { logUpdateToFirestore } from "./tasks/logUpdateToFirestore";
@@ -12,8 +11,7 @@ export interface TelegramBot {
 export const handleUpdate: TelegramBot = async (
   update: Update
 ): Promise<void> => {
-  const app = getFirebaseApp();
-  const db = getFirestore(app);
+  const db = getFirestore();
 
   const findAndBanSpammerTask = findAndBanSpammers(db, update);
   const logUpdateTask = logUpdateToFirestore(db, update);
