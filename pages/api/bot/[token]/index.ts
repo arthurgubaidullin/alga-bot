@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { logError } from "../../../logError";
-import { getBotToken } from "../../../telegram-bot/config";
-import { Update } from "../../../telegram-bot/types/Update";
-import * as theBot from "../../../the-bot";
+import { logError } from "../../../../logError";
+import { getBotToken } from "../../../../telegram-bot/config";
+import { Update } from "../../../../telegram-bot/types/Update";
+import * as theBot from "../../../../the-bot";
 
 export default async function handler(
   req: NextApiRequest,
