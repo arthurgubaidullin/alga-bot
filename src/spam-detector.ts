@@ -1,4 +1,4 @@
-const re = /(\p{Extended_Pictographic}.?){3}\s.+/gu;
+import { spamPatterns } from "./spamPatterns";
 
 export interface SpamDetector {
   isSpam(s: string): boolean;
@@ -9,5 +9,5 @@ export const spamDetector: SpamDetector = {
 };
 
 export function isSpam(s: string): boolean {
-  return re.test(s);
+  return spamPatterns.every((re) => re.test(s));
 }
