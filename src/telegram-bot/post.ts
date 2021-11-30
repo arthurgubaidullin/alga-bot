@@ -1,5 +1,4 @@
 import axios from "axios";
-import { config } from "../config";
 import { Methods } from "./types/methods";
 import { Response } from "./types/Response";
 
@@ -11,16 +10,17 @@ export interface TelegramPost {
   ) => Promise<Response<Methods[M]["returns"]>>;
 }
 
-export const post: TelegramPost = {
+export const post = (getToken: () => string): TelegramPost => ({
   post: (methodName) => async (params) => {
-    const url = method(methodName);
+    const url = method(getToken(), methodName);
     const result = await axios.post(url, params);
     return result.data;
   },
-};
+});
 
 function method<T extends keyof Methods>(
+  token: string,
   name: T
 ): `https://api.telegram.org/bot${string}/${T}` {
-  return `https://api.telegram.org/bot${config.getBotToken()}/${name}`;
+  return `https://api.telegram.org/bot${token}/${name}`;
 }

@@ -14,6 +14,6 @@ export type Program = Logger &
 export const program: Program = {
   ...logger,
   ...config,
-  ...telegramPost,
+  ...telegramPost(config.getBotToken),
   ...spamDetector,
 };
