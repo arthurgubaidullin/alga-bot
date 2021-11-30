@@ -1,26 +1,35 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getBotWebhookURL } from "../../../../telegram-bot/config";
-import { post } from "../../../../telegram-bot/post";
+import type { AxiosError } from "axios";
+import type { NextApiHandler } from "next";
+import { logError } from "../../../../logError";
+import { program, Program } from "../../../../program";
+import { validateBotToken } from "../../../../validateBotToken";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const getWebhookInfo = post.post("getWebhookInfo");
-  const setWebhook = post.post("setWebhook");
-  const resp = await getWebhookInfo({});
+const handler =
+  (P: Program): NextApiHandler =>
+  async (req, res) => {
+    try {
+      const getWebhookInfo = P.post("getWebhookInfo");
+      const setWebhook = P.post("setWebhook");
 
-  if (!resp.ok) {
-    throw new Error(resp.description);
-  }
-  const url = resp.result.url;
+      const resp = await getWebhookInfo({});
 
-  if (url === getBotWebhookURL()) {
-    res.status(400).end();
-    return;
-  }
+      if (!resp.ok) {
+        throw new Error(resp.description);
+      }
+      const url = resp.result.url;
 
-  await setWebhook({ url: getBotWebhookURL() });
+      if (url === P.getBotWebhookURL()) {
+        res.status(400).end();
+        return;
+      }
 
-  res.status(200).end();
-}
+      await setWebhook({ url: P.getBotWebhookURL() });
+
+      res.status(200).end();
+    } catch (error) {
+      logError(P)(error as AxiosError | Error);
+      res.status(500).end();
+    }
+  };
+
+export default validateBotToken(program)(handler);

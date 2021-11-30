@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getBotToken } from "./config";
+import { config } from "../config";
 import { Methods } from "./types/methods";
 import { Response } from "./types/Response";
 
@@ -22,5 +22,5 @@ export const post: TelegramPost = {
 function method<T extends keyof Methods>(
   name: T
 ): `https://api.telegram.org/bot${string}/${T}` {
-  return `https://api.telegram.org/bot${getBotToken()}/${name}`;
+  return `https://api.telegram.org/bot${config.getBotToken()}/${name}`;
 }
