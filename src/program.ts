@@ -2,7 +2,7 @@ import { Config, config } from "./config";
 import { logger, Logger } from "./logger";
 import { spamDetector, SpamDetector } from "./spam-detector";
 import {
-  post as telegramPost,
+  makePost as telegramPost,
   TelegramPost,
 } from "./telegram-bot/post";
 

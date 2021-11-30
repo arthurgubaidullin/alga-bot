@@ -10,7 +10,9 @@ export interface TelegramPost {
   ) => Promise<Response<Methods[M]["returns"]>>;
 }
 
-export const post = (getToken: () => string): TelegramPost => ({
+export const makePost = (
+  getToken: () => string
+): TelegramPost => ({
   post: (methodName) => async (params) => {
     const url = method(getToken(), methodName);
     const result = await axios.post(url, params);
