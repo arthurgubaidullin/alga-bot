@@ -10,7 +10,7 @@ import { Update } from "../../../../telegram-bot/types/Update";
 import * as theBot from "../../../../the-bot";
 import { validateBotToken } from "../../../../validateBotToken";
 
-const makeHandler =
+const handler =
   (P: Program): NextApiHandler =>
   async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -28,4 +28,4 @@ const makeHandler =
     }
   };
 
-export default validateBotToken(program)(makeHandler);
+export default validateBotToken(program)(handler);
