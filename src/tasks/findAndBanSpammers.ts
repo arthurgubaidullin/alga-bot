@@ -1,4 +1,7 @@
+import { Logger } from "../logger";
 import type { Program } from "../program";
+import { TelegramPost } from "../telegram-bot/post";
+import { deleteMessageParams } from "../telegram-bot/types/methods/deleteMessage";
 import type { Update } from "../telegram-bot/types/Update";
 
 export const findAndBanSpammers =
@@ -29,9 +32,11 @@ export const findAndBanSpammers =
             spammer !== null
         );
 
+      Promise.resolve(P.info("Trying to delete a message"));
+
       const maybeDeleteMessageTask =
         spammers.length > 0
-          ? P.post("deleteMessage")({
+          ? deleteMessage(P)({
               chat_id: chat.id,
               message_id: message.message_id,
             })
@@ -53,3 +58,15 @@ export const findAndBanSpammers =
       await maybeDeleteMessageTask;
     }
   };
+
+function deleteMessage(P: TelegramPost & Logger) {
+  return async (params: deleteMessageParams) => {
+    await P.info("Trying to delete a message", params);
+    const resp = await P.post("deleteMessage")(params);
+    if (resp.ok && resp.result) {
+      await P.info("Message deleted", params);
+    } else {
+      await P.info("The message was not deleted", params);
+    }
+  };
+}
