@@ -1,4 +1,4 @@
-type deleteMessageParams = {
+export type deleteMessageParams = {
   chat_id: number | string;
   message_id: number;
 };
