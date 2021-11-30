@@ -2,7 +2,9 @@ const botToken = process.env.TELEGRAM_BOT_TOKEN;
 
 export function getBotToken(): string {
   if (!botToken) {
-    throw new Error("TELEGRAM_BOT_TOKEN enviroment variable not setted.");
+    throw new Error(
+      "TELEGRAM_BOT_TOKEN enviroment variable not setted."
+    );
   }
   return botToken;
 }
@@ -20,7 +22,9 @@ const groupId = process.env.TELEGRAM_GROUP_ID;
 
 export function getGroupId(): string {
   if (!groupId) {
-    throw new Error("TELEGRAM_GROUP_ID enviroment variable not setted.");
+    throw new Error(
+      "TELEGRAM_GROUP_ID enviroment variable not setted."
+    );
   }
   return groupId;
 }

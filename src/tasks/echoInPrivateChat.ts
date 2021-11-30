@@ -1,5 +1,5 @@
-import { TelegramPost } from "../telegram-bot/post";
-import { Update } from "../telegram-bot/types/Update";
+import type { TelegramPost } from "../telegram-bot/post";
+import type { Update } from "../telegram-bot/types/Update";
 
 export const echoInPrivateChat =
   (P: TelegramPost) => async (update: Update) => {
