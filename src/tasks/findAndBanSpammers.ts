@@ -1,6 +1,7 @@
 import { Logger } from "../logger";
 import type { Program } from "../program";
 import { TelegramPost } from "../telegram-bot/post";
+import { BanChatMemberParams } from "../telegram-bot/types/methods/banChatMember";
 import { deleteMessageParams } from "../telegram-bot/types/methods/deleteMessage";
 import type { Update } from "../telegram-bot/types/Update";
 
@@ -32,8 +33,6 @@ export const findAndBanSpammers =
             spammer !== null
         );
 
-      Promise.resolve(P.info("Trying to delete a message"));
-
       const maybeDeleteMessageTask =
         spammers.length > 0
           ? deleteMessage(P)({
@@ -46,11 +45,11 @@ export const findAndBanSpammers =
         spammers.map(async (spammer) => {
           const uid = spammer.id;
 
-          const banTask = P.post("banChatMember")({
+          const banTask = banChatMember(P)({
             chat_id: chat.id,
             user_id: uid,
             revoke_messages: true,
-          }).then((a) => P.log("ban result", a));
+          });
 
           await Promise.all([banTask]);
         })
@@ -59,8 +58,24 @@ export const findAndBanSpammers =
     }
   };
 
-function deleteMessage(P: TelegramPost & Logger) {
-  return async (params: deleteMessageParams) => {
+function banChatMember(
+  P: TelegramPost & Logger
+): (params: BanChatMemberParams) => Promise<void> {
+  return async (params: BanChatMemberParams) => {
+    await P.info("Trying to ban a chat member", params);
+    const resp = await P.post("banChatMember")(params);
+    if (resp.ok && resp.result) {
+      await P.info("Chat member banned", params);
+    } else {
+      await P.info("The chat member was not banned", params);
+    }
+  };
+}
+
+function deleteMessage(
+  P: TelegramPost & Logger
+): (params: deleteMessageParams) => Promise<void> {
+  return async (params) => {
     await P.info("Trying to delete a message", params);
     const resp = await P.post("deleteMessage")(params);
     if (resp.ok && resp.result) {
